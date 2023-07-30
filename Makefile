@@ -1,11 +1,11 @@
-run-dev:
+dev:
 	nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run ./src/main.go
 
 build:
 	mkdir -p ./build
 	go build -o ./build/main ./src/main.go
 
-run-prod:
+prod:
 	# Make sure to run `make build` before running this command
 	./build/main
 
