@@ -3,7 +3,7 @@
 .idea/
 
 # Build
-build/
+build/*
 
 # Hidden files
 .env
@@ -33,5 +33,3 @@ build/
 
 # Go workspace file
 go.work
-
-# End of https://www.toptal.com/developers/gitignore/api/go
