@@ -64,6 +64,13 @@ func main() {
 	// -- Setup fiber
 	app := fiber.New()
 
+	app.Use(cors.New(
+		cors.Config{
+			AllowOrigins: "*",
+			AllowHeaders: "Origin, Content-Type, Accept",
+		},
+	))
+
 	app.Use(recover.New())
 
 	fmt.Println("Running in: " + os.Getenv("APP_ENV"))
