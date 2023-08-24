@@ -8,7 +8,6 @@ This is a starter template for using Go as a REST service. It uses [Fiber](https
 
 Because Go is awesome. And will serve more requests per dollar than most other languages.
 
-## How to use?
 ## What's does the template offer?
 
 - A Makefile with commands for running the application in development and production mode, building the application, running tests and running database migrations
@@ -16,13 +15,15 @@ Because Go is awesome. And will serve more requests per dollar than most other l
 - Project structure for a web application
 - Web framework and ORM setup
 
+## Usage
+
 After cloning this template repository & adding database credentials in a `.env` file in the root directory, the following Makefile commands are available:
 
 - `make dev` - Runs the application in development mode
 - `make build-exe` - Builds the application
 - `make prod` - Runs the application in production mode. This requires the application to be built first
 - `make test` - Runs any Go test it finds
-- `make migrate` - Runs the database migrations
+- `make migrate-db` - Runs the database migrations
 
 ## Contributing
 
