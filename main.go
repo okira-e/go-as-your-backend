@@ -5,10 +5,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/Okira-E/go-as-your-backend/src/datasource"
+	"github.com/Okira-E/go-as-your-backend/app/datasource"
 
-	"github.com/Okira-E/go-as-your-backend/src/routers"
-	"github.com/Okira-E/go-as-your-backend/src/utils"
+	"github.com/Okira-E/go-as-your-backend/app/routers"
+	"github.com/Okira-E/go-as-your-backend/app/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"

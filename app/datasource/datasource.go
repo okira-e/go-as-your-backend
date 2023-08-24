@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Okira-E/go-as-your-backend/src/tables"
+	"github.com/Okira-E/go-as-your-backend/app/tables"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

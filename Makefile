@@ -1,8 +1,8 @@
 dev:
-	nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run ./src/main.go
+	nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run ./main.go
 
 build-exe:
-	go build -o ./build/server ./src/main.go
+	go build -o ./build/server ./main.go
 
 prod:
 	# Make sure to run `make build-exe` before running this command
@@ -12,4 +12,4 @@ test:
 	go test ./src/... -v
 
 migrate:
-	go run ./src/main.go migrate
+	go run ./main.go migrate
