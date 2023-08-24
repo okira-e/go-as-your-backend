@@ -13,3 +13,6 @@ test:
 
 migrate-db:
 	go run ./main.go migrate
+
+openapi:
+	swag init --dir ./,./app/routes
