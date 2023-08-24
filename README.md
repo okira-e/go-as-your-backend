@@ -12,11 +12,10 @@ Because Go is awesome. And will serve more requests per dollar than most other l
 
 After cloning this template repository & adding database credentials in a `.env` file in the root directory, the following Makefile commands are available:
 
-- `make run-dev` - Runs the application in development mode
-- `make build` - Builds the application
-- `make run-prod` - Runs the application in production mode. This requires the application to be built first
+- `make dev` - Runs the application in development mode
+- `make build-exe` - Builds the application
+- `make prod` - Runs the application in production mode. This requires the application to be built first
 - `make test` - Runs any Go test it finds
-- `make clean` - Cleans the build files
 - `make migrate` - Runs the database migrations
 
 ## Contributing
