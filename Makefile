@@ -11,5 +11,5 @@ prod:
 test:
 	go test ./src/... -v
 
-migrate:
+migrate-db:
 	go run ./main.go migrate
