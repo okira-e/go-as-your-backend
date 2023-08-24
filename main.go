@@ -57,7 +57,8 @@ func main() {
 
 	fmt.Println("Running in: " + os.Getenv("APP_ENV"))
 
-	if os.Getenv("ENV") != "PROD" {
+	if os.Getenv("APP_ENV") != "PROD" {
+		fmt.Println("Using logger")
 		app.Use(logger.New(logger.Config{
 			Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
 		}))
