@@ -24,6 +24,7 @@ After cloning this template repository & adding database credentials in a `.env`
 - `make prod` - Runs the application in production mode. This requires the application to be built first
 - `make test` - Runs any Go test it finds
 - `make migrate-db` - Runs the database migrations
+- `make openapi` - Generates/Updates the OpenAPI documentation
 
 ## Contributing
 
