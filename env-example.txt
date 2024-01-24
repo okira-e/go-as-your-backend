@@ -1,3 +1,4 @@
+HOST="localhost"
 PORT="3200"
 DB_HOST="localhost"
 DB_USER="postgres"

@@ -6,13 +6,13 @@ import (
 	"log"
 	"os"
 
-	"github.com/Okira-E/go-as-your-backend/app/datasource"
+	"github.com/okira-e/go-as-your-backend/app/datasource"
 
-	"github.com/Okira-E/go-as-your-backend/app/routes"
-	"github.com/Okira-E/go-as-your-backend/app/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/okira-e/go-as-your-backend/app/routes"
+	"github.com/okira-e/go-as-your-backend/app/utils"
 )
 
 // @title Fiber Example API
@@ -57,7 +57,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		fmt.Println("Migrated database")
+		fmt.Println("Successfully Migrated database")
 		return
 	}
 
@@ -73,6 +73,7 @@ func main() {
 
 	app.Use(recover.New())
 
+	fmt.Println("Previously generated OpenAPI docs are available at: " + os.Getenv("HOST") + ":" + os.Getenv("PORT") + "/swagger")
 	fmt.Println("Running in: " + os.Getenv("APP_ENV"))
 
 	if os.Getenv("APP_ENV") != "PROD" {
@@ -83,7 +84,7 @@ func main() {
 	}
 
 	// Get the sql.DB object to pass to the routes
-	sqlDB, err := gormDB.DB()
+	sqlDB := gormDB
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -92,11 +93,16 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		log.Fatal("environment variable PORT is not set")
+	}
+
+	host := os.Getenv("HOST")
+	if host == "" {
+		log.Fatal("environment variable HOST is not set")
 	}
 
 	// -- Start server
-	err = app.Listen(":" + port)
+	err = app.Listen(host + ":" + port)
 	if err != nil {
 		log.Fatal(err)
 	}
