@@ -1,14 +1,16 @@
 package routes
 
 import (
-	"database/sql"
-
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
-// SetupRoutes sets up all the routes for the application
-func SetupRoutes(app *fiber.App, db *sql.DB) {
-	SwaggerRouter(app)
+var db *gorm.DB
 
-	PingRouter(app, db)
+// SetupRoutes sets up all the routes for the application
+func SetupRoutes(app *fiber.App, datasource *gorm.DB) {
+	db = datasource
+
+	SwaggerRouter(app)
+	PingRouter(app)
 }
