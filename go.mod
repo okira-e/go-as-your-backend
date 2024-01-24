@@ -1,4 +1,4 @@
-module github.com/Okira-E/go-as-your-backend
+module github.com/okira-e/go-as-your-backend
 
 go 1.19
 
