@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Okira-E/go-as-your-backend/app/tables"
+	"github.com/okira-e/go-as-your-backend/app/tables"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -47,7 +47,7 @@ func DisconnectOrPanic(gormDB *gorm.DB) {
 func Migrate(gormDB *gorm.DB) error {
 	var err error
 
-	err = gormDB.AutoMigrate(tables.Models...)
+	err = gormDB.AutoMigrate(tables.Organizations{}, tables.Products{}, tables.Projects{}, tables.Users{}, tables.Roles{})
 	if err != nil {
 		return err
 	}
