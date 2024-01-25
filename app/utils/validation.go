@@ -59,6 +59,13 @@ func validate[T any](obj T, fields ...string) ([]string, error) {
 			isZero = value.Float() == 0
 		case reflect.String:
 			isZero = value.String() == ""
+		case reflect.Slice:
+			fallthrough
+		case reflect.Array:
+			fallthrough
+		case reflect.Map:
+			isZero = value.Len() == 0
+
 		default:
 			return []string{}, fmt.Errorf("field %s is not supported", field)
 		}
@@ -70,4 +77,5 @@ func validate[T any](obj T, fields ...string) ([]string, error) {
 
 	return missingFields, nil
 }
+
 
