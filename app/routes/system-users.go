@@ -14,6 +14,7 @@ func systemUsersRouter(app *fiber.App) {
 
 	app.Get(routerPath, getSystemUsers)
 	app.Post(routerPath, registerSystemUser)
+	app.Delete(routerPath, deleteSystemUser)
 }
 
 type SystemUserDTO struct {
@@ -120,5 +121,36 @@ func registerSystemUser(c *fiber.Ctx) error {
 	userId := systemUser.ID // Get the ID of the system user that was just created. Feels like magic.
 
 	return utils.Ok(c, 201, "", userId)
+}
+
+// @Summary Delete a system user
+// @Description Delete a system user
+// @Tags system-users
+// @Accept */*
+// @Produce application/json
+// @Param id body uint true "ID of the system user to delete"
+// @Success 200 "OK"
+// @Router /api/system-users [DELETE]
+func deleteSystemUser(c *fiber.Ctx) error {
+	body := struct {
+		ID uint `validate:"required" json:"id"`
+	}{}
+
+	err := json.Unmarshal(c.Body(), &body)
+	if err != nil {
+		return utils.Err(c, 400, err.Error(), nil)
+	}
+
+	err = utils.ValidateFields(&body)
+	if err != nil {
+		return utils.Err(c, 400, err.Error(), nil)
+	}
+
+	result := db.Delete(&tables.SystemUsers{}, body.ID)
+	if result.Error != nil {
+		return utils.Err(c, 500, result.Error.Error(), nil)
+	}
+
+	return utils.Ok(c, 200, "", nil)
 }
 
