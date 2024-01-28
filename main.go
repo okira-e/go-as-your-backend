@@ -26,7 +26,7 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	// -- Setup flags
+	// Setup flags
 	migrate := false
 
 	for _, arg := range os.Args {
@@ -35,22 +35,31 @@ func main() {
 		}
 	}
 
-	// -- Load environment variables
+	// Load environment variables
 	err := utils.LoadEnvVariables()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// -- Connect to database
-	gormDB, err := datasource.Connect()
+	// Connect to database
+	gormDB, err := datasource.Connect() // Doesn't report error if database is not available. We do it later.
 	if err != nil {
 		log.Fatal(err)
-	} else {
-		fmt.Println("Connected to database")
 	}
 	defer datasource.DisconnectOrPanic(gormDB)
 
-	// -- Migrate database if --migrate flag is set
+	db, err := gormDB.DB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Successfully connected to database")
+
+	// Migrate database if --migrate flag is set
 	if migrate {
 		err = datasource.Migrate(gormDB)
 		if err != nil {
@@ -61,7 +70,7 @@ func main() {
 		return
 	}
 
-	// -- Setup fiber
+	// Setup fiber
 	app := fiber.New()
 
 	app.Use(cors.New(
@@ -104,7 +113,7 @@ func main() {
 		log.Fatal("environment variable HOST is not set")
 	}
 
-	// -- Start server
+	// Start server
 	err = app.Listen(host + ":" + port)
 	if err != nil {
 		log.Fatal(err)
