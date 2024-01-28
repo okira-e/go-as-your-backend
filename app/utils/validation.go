@@ -2,21 +2,13 @@ package utils
 
 import (
 	"fmt"
-	"github.com/gofiber/fiber/v2"
+	"github.com/go-playground/validator/v10"
 	"reflect"
 )
 
-func ValidateFields[T any](c *fiber.Ctx, obj T, fields ...string) (error, bool) {
-	missingFields, err := validate(obj, fields...)
-	if err != nil {
-		return Err(c, fiber.StatusInternalServerError, err.Error(), nil), false
-	}
-
-	if len(missingFields) > 0 {
-		return Err(c, fiber.StatusBadRequest, fmt.Sprintf("missing fields: %s", missingFields), nil), false
-	}
-
-	return nil, true
+func ValidateFields[T any](body *T) error {
+	v := validator.New(validator.WithRequiredStructEnabled())
+	return v.Struct(body)
 }
 
 // validate returns any missing fields specified in an object.
@@ -77,5 +69,4 @@ func validate[T any](obj T, fields ...string) ([]string, error) {
 
 	return missingFields, nil
 }
-
 
