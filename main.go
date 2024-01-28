@@ -28,14 +28,14 @@ import (
 func main() {
 	// Setup flags
 	migrate := false
-	logSqlBuilder := false
+	logGormTransactions := false
 
 	for _, arg := range os.Args {
 		if arg == "migrate" {
 			migrate = true
 		}
 		if arg == "log-sql" {
-			logSqlBuilder = true
+			logGormTransactions = true
 		}
 	}
 
@@ -65,7 +65,7 @@ func main() {
 
 	// Migrate database if --migrate flag is set
 	if migrate {
-		err = datasource.Migrate(gormDB)
+		err = datasource.Migrate(gormDB, logGormTransactions)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -95,7 +95,7 @@ func main() {
 			Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
 		}))
 
-		if logSqlBuilder {
+		if logGormTransactions {
 			fmt.Println("Using Gorm logger")
 			gormDB.Logger = gormDB.Logger.LogMode(4)
 		}
