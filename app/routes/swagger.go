@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-// SwaggerRouter sets up the swagger routes
-func SwaggerRouter(app *fiber.App) {
+// swaggerRouter sets up the swagger routes
+func swaggerRouter(app *fiber.App) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
