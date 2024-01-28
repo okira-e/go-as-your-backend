@@ -81,6 +81,9 @@ func main() {
 		app.Use(logger.New(logger.Config{
 			Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
 		}))
+
+		fmt.Println("Using Gorm logger")
+		gormDB.Logger = gormDB.Logger.LogMode(4)
 	}
 
 	// Get the sql.DB object to pass to the routes
