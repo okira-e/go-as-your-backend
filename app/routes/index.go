@@ -11,6 +11,7 @@ var db *gorm.DB
 func SetupRoutes(app *fiber.App, datasource *gorm.DB) {
 	db = datasource
 
-	SwaggerRouter(app)
-	PingRouter(app)
+	swaggerRouter(app)
+	pingRouter(app)
+	systemUsersRouter(app)
 }
