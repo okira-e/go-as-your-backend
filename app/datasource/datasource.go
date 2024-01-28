@@ -47,6 +47,7 @@ func DisconnectOrPanic(gormDB *gorm.DB) {
 func Migrate(gormDB *gorm.DB) error {
 	var err error
 
+	gormDB.Logger = gormDB.Logger.LogMode(4)
 	err = gormDB.AutoMigrate(tables.Organizations{}, tables.Products{}, tables.Projects{}, tables.SystemUsers{}, tables.Roles{})
 	if err != nil {
 		return err
