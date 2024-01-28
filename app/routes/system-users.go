@@ -64,11 +64,15 @@ func registerSystemUser(c *fiber.Ctx) error {
 		return utils.Err(c, 400, err.Error(), nil)
 	}
 
+	// Check for fields in the struct that are required and not provided.
 	err = utils.ValidateFields(&body)
 	if err != nil {
 		return utils.Err(c, 400, err.Error(), nil)
 	}
 
+	// Retrieve the roles provided in the request body from the database from the roles table.
+	// `Find` automatically knows to look in the `roles` table because the type of `roles` is `[]*tables.Roles` matches
+	// the type of the `roles` table in `models.go`
 	var roles []*tables.Roles
 	results := db.Where("id IN ?", body.Roles).Find(&roles)
 	if results.Error != nil {
@@ -76,6 +80,7 @@ func registerSystemUser(c *fiber.Ctx) error {
 	}
 
 	// Check if the roles returned are the same as the roles requested. If not, return an error.
+	// This ensures all the roles are valid.
 	inValidRoles := []uint{}
 	for _, requestedRole := range body.Roles {
 		found := false
@@ -93,14 +98,20 @@ func registerSystemUser(c *fiber.Ctx) error {
 		return utils.Err(c, 400, fmt.Sprintf("Invalid roles: %d", inValidRoles), nil)
 	}
 
+	// Remove extra fields on the request body and move the data to a SystemUsers struct object.
 	var systemUser tables.SystemUsers
-	err = copier.Copy(&systemUser, &body)
+	err = copier.Copy(&systemUser, &body) // Copies the values of body to systemUser.
 	if err != nil {
 		return utils.Err(c, 500, err.Error(), nil)
 	}
 
+	// Set the roles of the system user to the roles retrieved from the database.
+	// Gorm will automatically create the relationship between the system user and the roles by inserting the roles
+	// IDs into the `users_roles` table.
 	systemUser.Roles = roles
 
+	// Create the user in the database. Again, Gorm knows to insert in the `system_users` table because the type of
+	// `systemUser` is `tables.SystemUsers` which matches the type of the `system_users` table in `models.go`.
 	result := db.Create(&systemUser)
 	if result.Error != nil {
 		return utils.Err(c, 500, result.Error.Error(), nil)
