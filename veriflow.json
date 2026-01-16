@@ -1,0 +1,314 @@
+{
+    "projectName": "go-as-your-backend",
+    "baseUrl": "http://localhost:3232/api/v1",
+    "flows": [
+        {
+            "name": "auth",
+            "steps": [
+                {
+                    "name": "register",
+                    "request": {
+                        "method": "POST",
+                        "path": "/users/register",
+                        "json": {
+                            "email": "john.doe-{{RUN_ID}}@example.com",
+                            "first_name": "John",
+                            "last_name": "Doe",
+                            "password": "$Password2025",
+                            "phone": "+123456{{RAND_DIGIT}}{{RAND_DIGIT}}{{RAND_DIGIT}}{{RAND_DIGIT}}"
+                        }
+                    },
+                    "assert": {
+                        "status": 201,
+                        "all": [
+                            {
+                                "jsonpath": "$.data.email",
+                                "exists": true,
+                                "contains": null,
+                                "equals": "john.doe-{{RUN_ID}}@example.com"
+                            }
+                        ]
+                    },
+                    "exports": {},
+                    "options": {
+                        "timeout": "2s"
+                    }
+                },
+                {
+                    "name": "login",
+                    "request": {
+                        "method": "POST",
+                        "path": "/users/login",
+                        "json": {
+                            "email": "john.doe-{{RUN_ID}}@example.com",
+                            "password": "$Password2025"
+                        }
+                    },
+                    "assert": {
+                        "status": 200,
+                        "all": [
+                            {
+                                "jsonpath": "$.data.email",
+                                "exists": true,
+                                "contains": null,
+                                "equals": "john.doe-{{RUN_ID}}@example.com"
+                            },
+                            {
+                                "jsonpath": "$.data.role_id",
+                                "exists": true,
+                                "contains": null,
+                                "equals": "null"
+                            }
+                        ]
+                    },
+                    "exports": {
+                        "user_id": "$.data.id"
+                    },
+                    "options": {}
+                }
+            ]
+        },
+        {
+            "name": "posts",
+            "steps": [
+                {
+                    "name": "create-post",
+                    "request": {
+                        "method": "POST",
+                        "path": "/posts",
+                        "json": {
+                            "title": "Test Post {{RUN_ID}}",
+                            "content": "This is a test post content.",
+                            "published": true
+                        }
+                    },
+                    "assert": {
+                        "status": 201,
+                        "all": [
+                            {
+                                "jsonpath": "$.data.title",
+                                "exists": true,
+                                "contains": "Test Post",
+                                "equals": null
+                            }
+                        ]
+                    },
+                    "exports": {
+                        "post_id": "$.data.id"
+                    },
+                    "options": {}
+                },
+                {
+                    "name": "fetch-all",
+                    "request": {
+                        "method": "GET",
+                        "path": "/posts",
+                        "json": null
+                    },
+                    "assert": {
+                        "status": 200,
+                        "all": [
+                            {
+                                "jsonpath": "$.data",
+                                "exists": true,
+                                "contains": null,
+                                "equals": null
+                            }
+                        ]
+                    },
+                    "exports": {},
+                    "options": {}
+                },
+                {
+                    "name": "fetch-count",
+                    "request": {
+                        "method": "GET",
+                        "path": "/posts/count",
+                        "json": null
+                    },
+                    "assert": {
+                        "status": 200,
+                        "all": [
+                            {
+                                "jsonpath": "$.data",
+                                "exists": true,
+                                "contains": null,
+                                "equals": null
+                            }
+                        ]
+                    },
+                    "exports": {},
+                    "options": {}
+                },
+                {
+                    "name": "fetch-published",
+                    "request": {
+                        "method": "GET",
+                        "path": "/posts/published",
+                        "json": null
+                    },
+                    "assert": {
+                        "status": 200,
+                        "all": [
+                            {
+                                "jsonpath": "$.data",
+                                "exists": true,
+                                "contains": null,
+                                "equals": null
+                            }
+                        ]
+                    },
+                    "exports": {},
+                    "options": {}
+                }
+            ]
+        },
+        {
+            "name": "filters",
+            "steps": [
+                {
+                    "name": "filter-by-published",
+                    "request": {
+                        "method": "GET",
+                        "path": "/posts?filter={\"where\":{\"and\":[{\"column\":\"published\",\"operator\":\"=\",\"value\":true}]}}",
+                        "json": null
+                    },
+                    "assert": {
+                        "status": 200,
+                        "all": [
+                            {
+                                "jsonpath": "$.data",
+                                "exists": true,
+                                "contains": null,
+                                "equals": null
+                            }
+                        ]
+                    },
+                    "exports": {},
+                    "options": {}
+                },
+                {
+                    "name": "filter-with-order-by",
+                    "request": {
+                        "method": "GET",
+                        "path": "/posts?filter={\"where\":{\"and\":[{\"column\":\"published\",\"operator\":\"=\",\"value\":true}]},\"order_by\":[{\"column\":\"created_at\",\"direction\":\"DESC\"}]}",
+                        "json": null
+                    },
+                    "assert": {
+                        "status": 200,
+                        "all": [
+                            {
+                                "jsonpath": "$.data",
+                                "exists": true,
+                                "contains": null,
+                                "equals": null
+                            }
+                        ]
+                    },
+                    "exports": {},
+                    "options": {}
+                },
+                {
+                    "name": "filter-with-pagination",
+                    "request": {
+                        "method": "GET",
+                        "path": "/posts?filter={\"where\":{\"and\":[{\"column\":\"published\",\"operator\":\"=\",\"value\":true}]}}&limit=5&offset=0",
+                        "json": null
+                    },
+                    "assert": {
+                        "status": 200,
+                        "all": [
+                            {
+                                "jsonpath": "$.data",
+                                "exists": true,
+                                "contains": null,
+                                "equals": null
+                            }
+                        ]
+                    },
+                    "exports": {},
+                    "options": {}
+                }
+            ]
+        },
+        {
+            "name": "validation",
+            "steps": [
+                {
+                    "name": "register-invalid-email",
+                    "request": {
+                        "method": "POST",
+                        "path": "/users/register",
+                        "json": {
+                            "email": "not-an-email",
+                            "first_name": "John",
+                            "last_name": "Doe",
+                            "password": "$Password2025",
+                            "phone": "+1234567890"
+                        }
+                    },
+                    "assert": {
+                        "status": 400,
+                        "all": []
+                    },
+                    "exports": {},
+                    "options": {}
+                },
+                {
+                    "name": "register-invalid-phone",
+                    "request": {
+                        "method": "POST",
+                        "path": "/users/register",
+                        "json": {
+                            "email": "test@example.com",
+                            "first_name": "John",
+                            "last_name": "Doe",
+                            "password": "$Password2025",
+                            "phone": "123456"
+                        }
+                    },
+                    "assert": {
+                        "status": 400,
+                        "all": []
+                    },
+                    "exports": {},
+                    "options": {}
+                },
+                {
+                    "name": "login-invalid-email",
+                    "request": {
+                        "method": "POST",
+                        "path": "/users/login",
+                        "json": {
+                            "email": "not-valid-email",
+                            "password": "$Password2025"
+                        }
+                    },
+                    "assert": {
+                        "status": 400,
+                        "all": []
+                    },
+                    "exports": {},
+                    "options": {}
+                },
+                {
+                    "name": "post-create-missing-title",
+                    "request": {
+                        "method": "POST",
+                        "path": "/posts",
+                        "json": {
+                            "content": "Content without title",
+                            "published": false
+                        }
+                    },
+                    "assert": {
+                        "status": 400,
+                        "all": []
+                    },
+                    "exports": {},
+                    "options": {}
+                }
+            ]
+        }
+    ]
+}
