@@ -2,6 +2,8 @@
 
 A starter template for building REST APIs in Go. Uses [Fiber](https://docs.gofiber.io/), [GORM](https://gorm.io/), and [Atlas](https://atlasgo.io/) for migrations, with a sensible project structure and built-in JWT authentication.
 
+> **Note:** This template is extracted from a production backend, not designed as a comprehensive framework. The patterns here reflect real-world needs rather than theoretical completeness—which is exactly what makes it practical.
+
 ## Why?
 
 Because Go is awesome, simple, reliable, and will serve more requests per dollar than most other languages.
